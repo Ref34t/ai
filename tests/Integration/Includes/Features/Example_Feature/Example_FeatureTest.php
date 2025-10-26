@@ -46,6 +46,26 @@ class Example_FeatureTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that register_default_features registers Example_Feature.
+	 *
+	 * @since 0.1.0
+	 */
+	public function test_register_default_features() {
+		$registry = new Feature_Registry();
+		$loader   = new Feature_Loader( $registry );
+		$loader->register_default_features();
+
+		$this->assertTrue(
+			$registry->has_feature( 'example-feature' ),
+			'Example feature should be registered'
+		);
+
+		$feature = $registry->get_feature( 'example-feature' );
+		$this->assertNotNull( $feature, 'Example feature should exist' );
+		$this->assertEquals( 'example-feature', $feature->get_id() );
+	}
+
+	/**
 	 * Test that the feature is registered correctly.
 	 *
 	 * @since 0.1.0
@@ -107,7 +127,7 @@ class Example_FeatureTest extends WP_UnitTestCase {
 
 		$modified_title = apply_filters( 'document_title_parts', $title_parts );
 
-		$this->assertEquals( 'My Site [AI] [AI]', $modified_title['site'] );
+		$this->assertEquals( 'My Site [AI]', $modified_title['site'] );
 	}
 
 	/**

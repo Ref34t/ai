@@ -77,27 +77,11 @@ class Feature_LoaderTest extends WP_UnitTestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
+		Feature_Loader::reset_initialization_state();
 		$this->registry = new Feature_Registry();
 		$this->loader   = new Feature_Loader( $this->registry );
 	}
 
-	/**
-	 * Test register_default_features registers Example_Feature.
-	 *
-	 * @since 0.1.0
-	 */
-	public function test_register_default_features() {
-		$this->loader->register_default_features();
-
-		$this->assertTrue(
-			$this->registry->has_feature( 'example-feature' ),
-			'Example feature should be registered'
-		);
-
-		$feature = $this->registry->get_feature( 'example-feature' );
-		$this->assertNotNull( $feature, 'Example feature should exist' );
-		$this->assertEquals( 'example-feature', $feature->get_id() );
-	}
 
 	/**
 	 * Test ai_register_features action hook fires.
