@@ -58,6 +58,7 @@ If you’re a plugin developer, you’ll be able to:
 |-----------|-------|
 | Placeholder repository | **created** |
 | Feature roadmap | **created** |
+| Admin settings screen | **in progress** |
 | Initial prototype | planned |
 | Community testing | planned |
 
