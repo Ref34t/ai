@@ -57,7 +57,7 @@ class Global_Settings {
 	 * @return bool Sanitized boolean value.
 	 */
 	public function sanitize_toggle( $value ): bool {
-		return (bool) $value;
+		return rest_sanitize_boolean( $value );
 	}
 
 	/**

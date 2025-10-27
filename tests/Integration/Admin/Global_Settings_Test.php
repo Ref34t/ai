@@ -111,6 +111,7 @@ class Global_Settings_Test extends WP_UnitTestCase {
 		$this->assertTrue( $this->settings->sanitize_toggle( '1' ), 'Should convert "1" to true' );
 		$this->assertTrue( $this->settings->sanitize_toggle( 'true' ), 'Should convert "true" to true' );
 		$this->assertFalse( $this->settings->sanitize_toggle( 0 ), 'Should convert 0 to false' );
+		$this->assertFalse( $this->settings->sanitize_toggle( 'false' ), 'Should convert "false" to false' );
 		$this->assertFalse( $this->settings->sanitize_toggle( '' ), 'Should convert empty string to false' );
 		$this->assertFalse( $this->settings->sanitize_toggle( null ), 'Should convert null to false' );
 	}
