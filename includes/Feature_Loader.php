@@ -35,7 +35,7 @@ class Feature_Loader {
 	 * @since 0.1.0
 	 * @var bool
 	 */
-	private $initialized = false;
+	private static bool $initialized = false;
 
 	/**
 	 * Constructor.
@@ -174,7 +174,7 @@ class Feature_Loader {
 	 * @since 0.1.0
 	 */
 	public function initialize_features(): void {
-		if ( $this->initialized ) {
+		if ( self::$initialized ) {
 			return;
 		}
 
@@ -188,7 +188,7 @@ class Feature_Loader {
 		$features_enabled = apply_filters( 'ai_features_enabled', true );
 
 		if ( ! $features_enabled ) {
-			$this->initialized = true;
+			self::$initialized = true;
 			return;
 		}
 
@@ -209,7 +209,7 @@ class Feature_Loader {
 		 */
 		do_action( 'ai_features_initialized' );
 
-		$this->initialized = true;
+		self::$initialized = true;
 	}
 
 	/**
@@ -220,6 +220,18 @@ class Feature_Loader {
 	 * @return bool True if initialized, false otherwise.
 	 */
 	public function is_initialized(): bool {
-		return $this->initialized;
+		return self::$initialized;
+	}
+
+	/**
+	 * Resets the initialization state.
+	 *
+	 * Primarily intended for test environments that need to re-run
+	 * feature registration within a single request.
+	 *
+	 * @since 0.1.0
+	 */
+	public static function reset_initialization_state(): void {
+		self::$initialized = false;
 	}
 }

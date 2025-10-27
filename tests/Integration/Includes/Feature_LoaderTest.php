@@ -77,6 +77,7 @@ class Feature_LoaderTest extends WP_UnitTestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
+		Feature_Loader::reset_initialization_state();
 		$this->registry = new Feature_Registry();
 		$this->loader   = new Feature_Loader( $this->registry );
 	}
@@ -248,18 +249,8 @@ class Feature_LoaderTest extends WP_UnitTestCase {
 		$feature = new Mock_Feature();
 		$this->registry->register_feature( $feature );
 
-		// Disable the feature.
-		add_filter(
-			'ai_feature_enabled',
-			function ( $enabled, $feature_id ) {
-				if ( 'mock-feature' === $feature_id ) {
-					return false;
-				}
-				return $enabled;
-			},
-			10,
-			2
-		);
+		// Disable the feature via feature-specific filter.
+		add_filter( 'ai_feature_mock-feature_enabled', '__return_false' );
 
 		$this->loader->initialize_features();
 
@@ -267,5 +258,7 @@ class Feature_LoaderTest extends WP_UnitTestCase {
 			$feature->register_called,
 			'Disabled feature register() should not be called'
 		);
+
+		remove_filter( 'ai_feature_mock-feature_enabled', '__return_false' );
 	}
 }

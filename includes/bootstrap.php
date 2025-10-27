@@ -9,6 +9,11 @@
 
 namespace WordPress\AI;
 
+use WordPress\AI\Admin\Global_Settings;
+use WordPress\AI\Admin\REST_Settings_Controller;
+use WordPress\AI\Admin\Settings_Page;
+use WordPress\AI\Admin\Settings_Registry as Admin_Settings_Registry;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -159,6 +164,15 @@ function load(): void {
 
 	// Hook feature initialization to init.
 	add_action( 'init', __NAMESPACE__ . '\initialize_features' );
+	add_action( 'admin_init', __NAMESPACE__ . '\initialize_admin' );
+
+	add_action(
+		'rest_api_init',
+		static function () {
+			$controller = new REST_Settings_Controller();
+			$controller->register_routes();
+		}
+	);
 }
 
 /**
@@ -183,6 +197,54 @@ function initialize_features(): void {
 			'0.1.0'
 		);
 	}
+}
+
+/**
+ * Retrieves the shared settings registry instance.
+ *
+ * @since 0.1.0
+ *
+ * @return Admin_Settings_Registry Settings registry instance.
+ */
+function get_settings_registry(): Admin_Settings_Registry {
+	static $registry = null;
+
+	if ( null === $registry ) {
+		$registry = new Admin_Settings_Registry();
+	}
+
+	return $registry;
+}
+
+/**
+ * Initializes admin-specific functionality.
+ *
+ * @since 0.1.0
+ */
+function initialize_admin(): void {
+	static $initialized = false;
+
+	if ( $initialized || ! is_admin() ) {
+		return;
+	}
+
+	$initialized = true;
+
+	$global_settings = new Global_Settings();
+	$global_settings->register_settings();
+
+	$registry      = get_settings_registry();
+	$settings_page = new Settings_Page( $registry );
+	$settings_page->register();
+
+	/**
+	 * Allow features to register settings sections.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param Admin_Settings_Registry $registry Settings registry instance.
+	 */
+	do_action( 'ai_register_settings_sections', $registry );
 }
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\load' );
