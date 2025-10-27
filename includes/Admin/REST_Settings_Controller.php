@@ -46,6 +46,15 @@ class REST_Settings_Controller extends WP_REST_Controller {
 	protected $rest_base = 'ai-experiments/settings';
 
 	/**
+	 * Registers hooks for the controller.
+	 *
+	 * @since 0.1.0
+	 */
+	public function register_hooks(): void {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+	}
+
+	/**
 	 * Registers the routes for settings.
 	 *
 	 * @since 0.1.0

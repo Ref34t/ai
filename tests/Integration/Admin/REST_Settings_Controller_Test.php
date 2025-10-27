@@ -49,7 +49,7 @@ class REST_Settings_Controller_Test extends WP_UnitTestCase {
 
 		$this->controller = new REST_Settings_Controller();
 
-		add_action( 'rest_api_init', array( $this->controller, 'register_routes' ) );
+		$this->controller->register_hooks();
 		do_action( 'rest_api_init' );
 
 		// Create test users.

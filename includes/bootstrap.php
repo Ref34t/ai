@@ -166,13 +166,7 @@ function load(): void {
 	add_action( 'init', __NAMESPACE__ . '\initialize_features' );
 	add_action( 'admin_init', __NAMESPACE__ . '\initialize_admin' );
 
-	add_action(
-		'rest_api_init',
-		static function () {
-			$controller = new REST_Settings_Controller();
-			$controller->register_routes();
-		}
-	);
+	get_rest_settings_controller()->register_hooks();
 }
 
 /**
@@ -214,6 +208,23 @@ function get_settings_registry(): Admin_Settings_Registry {
 	}
 
 	return $registry;
+}
+
+/**
+ * Retrieves the shared REST settings controller instance.
+ *
+ * @since 0.1.0
+ *
+ * @return REST_Settings_Controller REST controller instance.
+ */
+function get_rest_settings_controller(): REST_Settings_Controller {
+	static $controller = null;
+
+	if ( null === $controller ) {
+		$controller = new REST_Settings_Controller();
+	}
+
+	return $controller;
 }
 
 /**
