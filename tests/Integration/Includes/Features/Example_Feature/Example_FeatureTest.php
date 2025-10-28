@@ -30,6 +30,7 @@ class Example_FeatureTest extends WP_UnitTestCase {
 		$loader   = new Feature_Loader( $registry );
 		$loader->register_default_features();
 		$loader->initialize_features();
+		do_action( 'rest_api_init' );
 
 		$feature = $registry->get_feature( 'example-feature' );
 		$this->assertInstanceOf( Example_Feature::class, $feature, 'Example feature should be registered in the registry.' );
